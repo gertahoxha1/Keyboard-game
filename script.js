@@ -3,6 +3,34 @@ let player;
 
 let keys = {};
 
+let bullets = [];
+
+//qekjo e krijon nje texture te fotografis plumbi
+let bulletTexture = PIXI.Texture.from("bullet.png");
+
+function shootBullet(){
+   let bullet = new PIXI.Sprite(bulletTexture);
+   bullet.anchor.set(0.5);
+   bullet.scale.set(0.3);
+   bullet.x = player.x;
+   bullet.y = player.y;
+   app.stage.addChild(bullet);
+   bullets.push(bullet);
+
+}
+
+
+function moveBullets(){
+    bullets.forEach(bullet => {
+        bullet.y -= 10;
+        if(bullet.y <0 ){
+            app.stage.removeChild(bullet);
+            bullets.splice(bullets.indexOf(bullet), 1);
+        }
+    })
+}
+
+
 // qekjo krijon katrorin e zi
 window.onload = function(){
     app = new PIXI.Application({
@@ -61,6 +89,10 @@ window.onload = function(){
         if(keys["39"]){
             player.x += 5;
         }
+        if (keys["65"]){
+            shootBullet();
+        }
+        moveBullets();
 
     }
 
