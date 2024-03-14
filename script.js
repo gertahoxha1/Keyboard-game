@@ -2,11 +2,33 @@ let app;
 let player;
 
 let keys = {};
-
 let bullets = [];
+let challenges = []; // array to store challenges
 
 //qekjo e krijon nje texture te fotografis plumbi
 let bulletTexture = PIXI.Texture.from("bullet.png");
+let challengeTexture = PIXI.Texture.from("challenge.png");
+
+
+function createChallenge(){
+    let challenge = new PIXI.Sprite(challengeTexture);
+    challenge.anchor.set(0.5);
+    challenge.scale.set(0.4);
+    challenge.x = Math.random() * app.view.width;
+    challenge.y= -50;
+    app.stage.addChild(challenge);
+    challenges.push(challenge);
+}
+
+function moveChallenges(){
+    challenges.forEach(challenge => {
+        challenge.y += 3;
+        if (challenge.y > app.view.height){
+            app.stage.removeChild(challenge);
+            challenges.splice(challenges.indexOf(challenge), 1);
+        }
+    })
+}
 
 function shootBullet(){
    let bullet = new PIXI.Sprite(bulletTexture);
@@ -93,6 +115,11 @@ window.onload = function(){
             shootBullet();
         }
         moveBullets();
+
+        if (Math.random() < 0.01){
+            createChallenge();
+        }
+        moveChallenges();
 
     }
 
